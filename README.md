@@ -1,8 +1,8 @@
-# getting-started project
+# Rummager
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Local network monitoring tool (for Linux/Windows. Ideally for Raspberry PI).
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+Under development. Initial commit...
 
 ## Running the application in dev mode
 
