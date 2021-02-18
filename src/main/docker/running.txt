@@ -1,0 +1,11 @@
+mvnw package
+docker build  --no-cache  -f src/main/docker/Dockerfile.jvm -t codoblast/rummager .
+
+
+docker run --name mariadb-rummager -p 3306:3306 -v c:/datastore:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=cNxke94rja -e MYSQL_DATABASE=rummager -d mariadb
+
+docker run -i --rm -p 8080:8080 codoblast/rummager
+
+
+
+docker-compose -f stack.yml up

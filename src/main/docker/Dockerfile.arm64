@@ -1,0 +1,23 @@
+FROM balenalib/raspberry-pi-openjdk:8-stretch
+#FROM arm64v8/adoptopenjdk
+ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV AB_ENABLED=jmx_exporter
+ARG RUN_JAVA_VERSION=1.3.8
+RUN mkdir -p /deployments/lib
+#COPY target/*.sh /deployments
+COPY target/lib/* /deployments/lib/
+COPY target/*-runner.jar /deployments/app.jar
+#RUN sed -i 's;http://archive.debian.org/debian/;http://deb.debian.org/debian/;' /etc/apt/sources.list
+#RUN sed -i 's;ftp.debian.org;archive.debian.org;' /etc/apt/sources.list
+
+
+RUN uname -m
+
+    #   apt-get update \
+       # && apt-get install curl \
+    #    && apt-get install iputils \
+ RUN        curl https://repo1.maven.org/maven2/io/fabric8/run-java-sh/${RUN_JAVA_VERSION}/run-java-sh-${RUN_JAVA_VERSION}-sh.sh -o /deployments/run-java.sh \
+        && chown 1001 /deployments/run-java.sh \
+        && chmod 540 /deployments/run-java.sh
+
+ENTRYPOINT [ "/deployments/run-java.sh" ]
