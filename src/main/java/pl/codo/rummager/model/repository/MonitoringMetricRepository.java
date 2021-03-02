@@ -1,13 +1,12 @@
 package pl.codo.rummager.model.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import pl.codo.rummager.model.Host;
-import pl.codo.rummager.model.MonitoringMetric;
+import pl.codo.rummager.model.metric.Metric;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class MonitoringMetricRepository implements PanacheRepository<MonitoringMetric> {
+public class MonitoringMetricRepository implements PanacheRepository<Metric> {
 
 
 }

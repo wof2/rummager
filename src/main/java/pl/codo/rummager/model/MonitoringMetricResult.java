@@ -9,10 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import pl.codo.rummager.model.metric.Metric;
 
 import javax.persistence.*;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -23,13 +23,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(
-   indexes = {@Index(name = "sampledAt_IDX", columnList = "MonitoringMetric_id, sampledAt")}
+   indexes = {@Index(name = "sampledAt_IDX", columnList = "Metric_id, sampledAt")}
 )
 public abstract class MonitoringMetricResult extends PanacheEntity {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonIgnore
-    private MonitoringMetric monitoringMetric;
+    private Metric metric;
 
     @NotNull
     @JsonFormat (shape = JsonFormat.Shape.STRING)

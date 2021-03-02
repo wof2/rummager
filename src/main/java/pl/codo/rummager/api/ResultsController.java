@@ -1,15 +1,9 @@
 package pl.codo.rummager.api;
 
-import lombok.var;
 import org.jboss.logging.Logger;
-import pl.codo.rummager.model.MonitoringMetric;
-import pl.codo.rummager.service.HostService;
-import pl.codo.rummager.service.MonitoringMetricService;
 import pl.codo.rummager.service.ResultsService;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;

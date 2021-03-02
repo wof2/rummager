@@ -8,9 +8,10 @@ import org.jboss.logging.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import pl.codo.rummager.model.MonitoringMetric;
+import pl.codo.rummager.model.metric.Metric;
 import pl.codo.rummager.model.MonitoringMetricResult;
 import pl.codo.rummager.model.PingMonitoringMetricResult;
+import pl.codo.rummager.model.metric.PingMetric;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
@@ -29,17 +30,17 @@ public class PingService implements Job {
         LOG.info("Executing job "+context.getJobDetail().getKey());
         var mmId = context.getMergedJobDataMap().getLong("MM_ID");
 
-        MonitoringMetric metric = MonitoringMetric.findById(mmId);
+        PingMetric metric = Metric.findById(mmId);
         List<MonitoringMetricResult> results = pingHost(metric);
         LOG.info("Executing job [finished] "+context.getJobDetail().getKey()+ ". Results are:"+results.stream().map(String::valueOf)
                 .collect(Collectors.joining(", ")));
 
     }
     @Transactional(Transactional.TxType.MANDATORY)
-    private List<MonitoringMetricResult> pingHost(MonitoringMetric metric) {
+    private List<MonitoringMetricResult> pingHost(PingMetric metric) {
         List<MonitoringMetricResult> results = new ArrayList<>();
         final IcmpPingRequest request = IcmpPingUtil.createIcmpPingRequest();
-        request.setHost (metric.getHost().getAddress());
+        request.setHost (metric.getAddress());
         // delegate
         for(int i=0; i<metric.getSamplesPerRun();i++ ) {
             final IcmpPingResponse response = IcmpPingUtil.executePingRequest(request);
@@ -71,7 +72,7 @@ public class PingService implements Job {
         request.setHost (url);
         // delegate
         final IcmpPingResponse response = IcmpPingUtil.executePingRequest(request);
-// log
+        // log
 
        return response.getRtt();
 

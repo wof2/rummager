@@ -7,10 +7,7 @@ import javax.transaction.Transactional;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import org.jboss.logging.Logger;
-import pl.codo.rummager.model.Host;
-import pl.codo.rummager.service.HostService;
-
-import java.util.List;
+import pl.codo.rummager.service.MetricService;
 
 @ApplicationScoped
 public class ApplicationLifecycle {
@@ -18,13 +15,12 @@ public class ApplicationLifecycle {
     private static final Logger LOGGER = Logger.getLogger("ListenerBean");
     
     @Inject
-    private HostService hostService;
+    MetricService metricService;
 
     @Transactional
     void onStart(@Observes StartupEvent ev) {
         LOGGER.info("The application is starting...");
-        List<Host> hosts = hostService.getAllHosts();
-        hosts.stream().filter(h -> h.getIsEnabled()).forEach(host -> hostService.registerHost(host));
+        metricService.registerAllEnabledMetrics();
     }
 
     void onStop(@Observes ShutdownEvent ev) {
