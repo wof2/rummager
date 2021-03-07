@@ -6,7 +6,7 @@ import pl.codo.rummager.model.metric.Metric;
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class MonitoringMetricRepository implements PanacheRepository<Metric> {
+public class MetricRepository implements PanacheRepository<Metric> {
 
 
 }

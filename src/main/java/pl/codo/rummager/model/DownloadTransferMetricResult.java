@@ -14,19 +14,15 @@ import javax.validation.constraints.Min;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class TransferMonitoringMetricResult extends MonitoringMetricResult {
-
-    @Min(value = 0)
-    private Integer uploadKbps;
+@ToString(callSuper = true)
+public class DownloadTransferMetricResult extends MetricResult {
 
     @Min(value = 0)
     private Integer downloadKbps;
 
-    public TransferMonitoringMetricResult(@Valid Metric parent, @Min(value = 0) Integer uploadKbps, @Min(value = 0) Integer downloadKbps, Boolean isSuccess ) {
+    public DownloadTransferMetricResult(@Valid Metric parent, @Min(value = 0) Integer downloadKbps, Boolean isSuccess ) {
         super();
         this.setMetric(parent);
-        this.uploadKbps = uploadKbps;
         this.downloadKbps = downloadKbps;
         this.setSuccess(isSuccess);
     }

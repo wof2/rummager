@@ -8,11 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.codo.rummager.model.MonitoringMetricResult;
+import pl.codo.rummager.model.MetricResult;
 import pl.codo.rummager.model.validators.CronExpression;
 
 import javax.persistence.*;
-import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -39,21 +39,23 @@ public abstract class Metric extends PanacheEntity {
     @Size(max=255)
     private String comment;
 
+    @Min(value = 0)
+    private int retentionDays = 30;
+
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-  /*  @OneToMany(
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )*/
+    @JsonGetter
+    public String getType() {
+        return this.getClass().getTypeName();
+    }
 
     @JsonGetter
    // @Valid
-    public List<MonitoringMetricResult> getLastResults() {
-        return MonitoringMetricResult.find("metric_id = ?1 order by sampledAt DESC",  this.id).page(0,10).list();
+    public List<MetricResult> getLastResults() {
+        return MetricResult.find("metric_id = ?1 order by sampledAt DESC",  this.id).page(0,10).list();
     }
 
 }

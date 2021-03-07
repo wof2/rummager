@@ -2,9 +2,9 @@ package pl.codo.rummager.api;
 
 import lombok.var;
 import org.jboss.logging.Logger;
-import pl.codo.rummager.model.metric.Metric;
 import pl.codo.rummager.model.metric.PingMetric;
-import pl.codo.rummager.model.metric.TransferMetric;
+import pl.codo.rummager.model.metric.DownloadTransferMetric;
+import pl.codo.rummager.model.metric.UploadTransferMetric;
 import pl.codo.rummager.service.MetricService;
 
 import javax.inject.Inject;
@@ -36,12 +36,21 @@ public class MetricsController {
     public Response getAllMetrics() {
         return Response.ok(metricService.getAllMetrics()).build();
     }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")
     public Response getMetricById(@PathParam("id") Long id) {
         return Response.ok(metricService.getMetricById(id)).build();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/type/{type}")
+    public Response getMetricsByType(@PathParam("type") MetricType type) {
+        return Response.ok(metricService.getMetricsByType(type)).build();
+    }
+
 
 
     @PATCH
@@ -58,6 +67,34 @@ public class MetricsController {
        return Response.ok().build();
     }
 
+    @PATCH
+    @Path("/transfer/download/id/{id}")
+    public Response updateDownloadTransferMetric(@PathParam("id") Long id, @Valid DownloadTransferMetric metric) {
+
+        try {
+            metricService.updateMetric(id, metric);
+        }
+        catch(NotFoundException exception) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok().build();
+    }
+
+    @PATCH
+    @Path("/transfer/upload/id/{id}")
+    public Response updateUploadTransferMetric(@PathParam("id") Long id, @Valid UploadTransferMetric metric) {
+
+        try {
+            metricService.updateMetric(id, metric);
+        }
+        catch(NotFoundException exception) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok().build();
+    }
+
     @POST
     @Path("/ping")
     public Response addPingMetric(@Valid PingMetric metric, @Context UriInfo uriInfo) {
@@ -69,12 +106,22 @@ public class MetricsController {
     }
 
     @POST
-    @Path("/transfer")
-    public Response addTransferMetric(@Valid TransferMetric metric, @Context UriInfo uriInfo) {
+    @Path("/transfer/download")
+    public Response addDownloadTransferMetric(@Valid DownloadTransferMetric metric, @Context UriInfo uriInfo) {
 
         metricService.registerMetric(metric);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(Long.toString(metric.id));
-        LOG.debug("New metric created with URI " + builder.build().toString());
+        LOG.debug("New download metric created with URI " + builder.build().toString());
+        return Response.created(builder.build()).build();
+    }
+
+    @POST
+    @Path("/transfer/upload")
+    public Response addUploadTransferMetric(@Valid UploadTransferMetric metric, @Context UriInfo uriInfo) {
+
+        metricService.registerMetric(metric);
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(Long.toString(metric.id));
+        LOG.debug("New upload metric created with URI " + builder.build().toString());
         return Response.created(builder.build()).build();
     }
 

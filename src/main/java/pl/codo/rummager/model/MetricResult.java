@@ -1,13 +1,11 @@
 package pl.codo.rummager.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import pl.codo.rummager.model.metric.Metric;
 
@@ -25,7 +23,8 @@ import java.time.LocalDateTime;
 @Table(
    indexes = {@Index(name = "sampledAt_IDX", columnList = "Metric_id, sampledAt")}
 )
-public abstract class MonitoringMetricResult extends PanacheEntity {
+@ToString(exclude = "metric")
+public abstract class MetricResult extends PanacheEntity {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonIgnore
@@ -39,7 +38,9 @@ public abstract class MonitoringMetricResult extends PanacheEntity {
     @Type(type="boolean")
     private Boolean success;
 
-
-
+    @JsonGetter
+    public String getType() {
+        return this.getClass().getTypeName();
+    }
 
 }

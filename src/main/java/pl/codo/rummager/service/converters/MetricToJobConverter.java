@@ -1,4 +1,4 @@
-package pl.codo.rummager.service;
+package pl.codo.rummager.service.converters;
 
 import org.quartz.Job;
 import pl.codo.rummager.model.metric.Metric;

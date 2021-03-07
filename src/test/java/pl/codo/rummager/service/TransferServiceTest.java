@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class TransferServiceTest implements ISpeedTestListener {
 
     @Inject
-    TransferService transferService;
+    DownloadTransferService transferService;
 
     private final int maxDuration = 100000;
 
     @Test
     void measureTransfer() throws InterruptedException {
-        transferService.measureTransfer("http://ipv4.ikoula.testdebit.info/100M.iso", maxDuration, this);
+       // transferService.measureDownload("http://ipv4.ikoula.testdebit.info/100M.iso", maxDuration, this);
         synchronized (this) {
             wait();
         }

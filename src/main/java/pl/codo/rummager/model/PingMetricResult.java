@@ -15,12 +15,12 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PingMonitoringMetricResult extends MonitoringMetricResult {
+public class PingMetricResult extends MetricResult {
 
     @Min(value = 1)
     private Integer pingRTT;
 
-    public PingMonitoringMetricResult(@Valid Metric parent, @Min(value = 1) Integer pingRTT, Boolean isSuccess) {
+    public PingMetricResult(@Valid Metric parent, @Min(value = 1) Integer pingRTT, Boolean isSuccess) {
         super();
         this.setMetric(parent);
         this.pingRTT = pingRTT;

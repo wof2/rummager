@@ -1,12 +1,9 @@
-package pl.codo.rummager.service;
+package pl.codo.rummager.service.converters;
 
-import org.icmp4j.tool.Ping;
-import org.quartz.Job;
-import pl.codo.rummager.model.metric.Metric;
 import pl.codo.rummager.model.metric.PingMetric;
+import pl.codo.rummager.service.PingService;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 @ApplicationScoped
 public class PingMetricToJobConverter implements MetricToJobConverter<PingMetric, PingService> {
