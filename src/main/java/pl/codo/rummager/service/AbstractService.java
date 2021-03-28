@@ -11,6 +11,7 @@ import pl.codo.rummager.model.MetricResult;
 import pl.codo.rummager.model.metric.Metric;
 import pl.codo.rummager.model.metric.PingMetric;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +26,9 @@ public abstract class AbstractService implements Job {
     private static final Logger LOG = Logger.getLogger(AbstractService.class);
     public static final String MetricIdAttributeName = "MM_ID";;
 
+    @Inject
+    ResultsService resultsService;
+
 
     @Transactional
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -33,7 +37,7 @@ public abstract class AbstractService implements Job {
         Metric metric = Metric.findById(mmId);
 
         if(cleanOldResults) {
-            long num = cleanOldResults(metric);
+            long num = resultsService.cleanOldResults(metric);
             AbstractService.LOG.info("Finished cleaning "+num+" old results for metric " + metric.id);
 
         }
@@ -44,10 +48,7 @@ public abstract class AbstractService implements Job {
 
     }
 
-    private long cleanOldResults(Metric metric) {
-       return MetricResult.delete("sampledAt < :date",  Parameters.with("date" , LocalDateTime.now().minusDays(metric.getRetentionDays())));
 
-    }
 
     public abstract void perform(Metric metric);
 }

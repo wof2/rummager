@@ -1,5 +1,6 @@
 package pl.codo.rummager.service;
 
+import io.quarkus.panache.common.Parameters;
 import org.jboss.logging.Logger;
 import pl.codo.rummager.model.DownloadTransferMetricResult;
 import pl.codo.rummager.model.MetricResult;
@@ -34,6 +35,12 @@ public class ResultsService {
 
     public @Valid List<MetricResult> getResultsForTodayByMetricId(Long metricId) {
         return MetricResult.find("Metric_id=?1 and sampledAt>=?2 order by sampledAt DESC", metricId, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT)).list();
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public long cleanOldResults(Metric metric) {
+        return MetricResult.delete("sampledAt < :date and Metric_id=:metricId",  Parameters.with("date" , LocalDateTime.now().minusDays(metric.getRetentionDays())).and("metricId",metric.id));
+
     }
 
     @Transactional

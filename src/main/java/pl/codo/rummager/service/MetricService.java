@@ -75,6 +75,9 @@ public class MetricService {
     public Metric updateMetric(Long id, @Valid Metric metric) {
         Metric persistentMetric = Metric.findById(id);
         if(persistentMetric == null) throw new NotFoundException();
+        if(!persistentMetric.getType().equals(metric.getType())) {
+            throw new IllegalArgumentException("Passed metric of id ="+id+" and type "+metric.getType()+" should be of type "+persistentMetric.getType());
+        }
         boolean wasEnabled = persistentMetric.getIsEnabled();
 
         Metric updated = metricsResource.update(id, metric);

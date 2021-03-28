@@ -2,6 +2,7 @@ package pl.codo.rummager.api;
 
 import lombok.var;
 import org.jboss.logging.Logger;
+import pl.codo.rummager.model.metric.Metric;
 import pl.codo.rummager.model.metric.PingMetric;
 import pl.codo.rummager.model.metric.DownloadTransferMetric;
 import pl.codo.rummager.model.metric.UploadTransferMetric;
